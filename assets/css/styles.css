@@ -1,0 +1,1107 @@
+/* ----------------------------------
+   VARIABLES
+---------------------------------- */
+:root {
+    --font-main: "Inter", sans-serif;
+
+    /* Title sizes */
+    --title-desktop: 72px;
+    --title-tablet: 3rem;
+    --title-mobile: 2.4rem;
+
+    /* Description sizes */
+    --desc-desktop: 18px;
+    --desc-mobile: 0.95rem;
+
+    /* Frame */
+    --frame-radius: 24px;
+    --frame-radius-mobile: 12px;
+
+    --frame-border: 4px;
+
+    /* Colors */
+    --black: #000000;
+    --white: #ffffff;
+    --gray: #666;
+}
+
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/static/Inter_18pt-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/static/Inter_18pt-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/static/Inter_18pt-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/static/Inter_18pt-Thin.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/static/Inter_18pt-Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+
+
+
+/* ----------------------------------
+   GLOBAL
+---------------------------------- */
+body {
+    font-family: var(--font-main);
+    background: var(--black);
+    color: var(--black);
+    overflow: hidden;
+    /* desktop/tablet – overridden on mobile */
+}
+
+/* MAIN HERO */
+#hero {
+    width: 100vw;
+    height: 100vh;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ----------------------------------
+   FRAME
+---------------------------------- */
+.frame {
+    width: 100%;
+    height: 100%;
+    background: var(--white);
+    border-radius: var(--frame-radius);
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+
+/* ----------------------------------
+   BACKGROUND GRID LINES (CSS ONLY)
+---------------------------------- */
+.grid-bg::before,
+.grid-bg::after {
+    content: "";
+    position: absolute;
+    background: var(--black);
+}
+
+.grid-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+/* Vertical center line */
+.grid-bg::before {
+    width: 0px;
+    height: 100%;
+    left: 25%;
+    top: 0;
+}
+
+/* Horizontal center line */
+.grid-bg::after {
+    height: 1px;
+    width: 100%;
+    left: 0;
+    top: 50%;
+}
+
+/* ----------------------------------
+   DOTS (top center, left, bottom)
+---------------------------------- */
+.dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--black);
+    display: inline-block;
+}
+
+/* top left */
+.title-image {
+    position: absolute;
+    left: 32px;
+    top: 32px;
+    width: 96px;
+    height: 48px;
+}
+
+/* TOP CENTER */
+.dots-top {
+    position: absolute;
+    top: 28px;
+    left: 44%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 16px;
+}
+
+/* LEFT SIDE (vertical) */
+.dots-left {
+    position: absolute;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* dots bottom */
+.dots-bottom {
+    position: absolute;
+    bottom: 32px;
+    left: 44%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 16px;
+}
+
+
+
+
+.explore-btn {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    display: flex;
+    align-items: center;
+    border: 1.33px solid var(--black);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--black);
+    background: var(--white);
+    overflow: hidden;
+}
+
+.explore-btn .btn-text {
+
+    padding: 14px 20px 14px 14px;
+    gap: 3px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    font-family: var(--font-main);
+    font-weight: 700;
+    letter-spacing: -1.33px;
+    border-right: 1.33px solid var(--black);
+    transition: color 0.5s ease-in;
+
+}
+
+.btn-text::before {
+
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    background: var(--black);
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transition: width 0.8s ease-in-out;
+
+
+}
+
+.explore-btn:hover .btn-text {
+    color: var(--white);
+}
+
+.explore-btn:hover .btn-text::before {
+
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: var(--black);
+    opacity: 1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.explore-btn .btn-text strong {
+    z-index: 2;
+}
+
+
+.explore-btn .btn-text p {
+
+    font-size: 16px;
+    font-weight: 200;
+    font-style: italic;
+    position: relative;
+    z-index: 2;
+}
+
+.explore-btn .btn-icon-wrapper {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 14px;
+}
+
+.explore-btn .btn-icon {
+    width: 38px;
+    height: 28px;
+    line-height: 100%;
+    letter-spacing: -0.67px;
+    transition: transform 0.8s ease;
+}
+
+.explore-btn:hover .btn-icon {
+    transform: scale(1.15);
+}
+
+
+
+
+/* ----------------------------------
+   MAIN CONTENT LAYOUT
+---------------------------------- */
+.content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+}
+
+/* LEFT CARD */
+.logo-card {
+    width: 440px;
+    height: 542px;
+    /* border: 5px solid var(--black); */
+    /* border-radius: 6px; */
+    /* background: var(--white); */
+    z-index: 1;
+    position: relative;
+    margin-left: 12.5%;
+    margin-right: 90px;
+    transition: transform 0.25s ease;
+}
+
+.logo-card::before {
+    content: "";
+    position: absolute;
+    background: var(--black);
+    width: 1px;
+    height: 200vh;
+    left: 50%;
+    top: -50%;
+    z-index: 0;
+
+}
+
+.logo-card img.logo-main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.logo-card .logo-subtext {
+    text-align: center;
+    font-size: 0.75rem;
+    margin-top: 6px;
+}
+
+.logo-card .logo-lang {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 32px;
+    margin-top: 18px;
+    font-size: 1rem;
+}
+
+/* ----------------------------------
+   RIGHT SIDE TEXT BLOCK
+---------------------------------- */
+.text-block {
+    padding-top: 20px;
+    flex: 1;
+    max-width: 600px;
+    position: relative;
+}
+
+.title {
+    font-size: var(--title-desktop);
+    font-family: var(--font-main);
+    padding-bottom: 22px;
+    font-weight: 700;
+    text-transform: lowercase;
+    position: relative;
+    line-height: 100%;
+    letter-spacing: -4px;
+    text-wrap: nowrap;
+
+}
+
+.title-wrapper {
+    display: inline-flex;
+    position: relative;
+}
+
+
+.stamp-image-wrapper {
+
+    position: absolute;
+    top: -30%;
+    right: -8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stamp-image-center {
+    width: 57px;
+    height: 42px;
+    /* aspect-ratio: 58/41; */
+    position: relative;
+    z-index: 1;
+}
+
+.stamp-image-center img {
+    width: 100%;
+    height: 100%;
+}
+
+.stamp-image-wrapper .rotateimgtext {
+    width: 123px;
+    height: 123px;
+
+}
+
+.stamp-image-wrapper .rotateimgtext img {
+    object-fit: contain;
+    width: 123px;
+    height: 123px;
+
+}
+
+.rotateimgtext {
+    position: absolute;
+    margin-top: 5px;
+    animation: rotateText 15s linear infinite;
+    -webkit-animation: rotateText 15s linear infinite;
+}
+
+@keyframes rotateText {
+    100% {
+        transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+    }
+
+    0% {
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+    }
+}
+
+.description {
+    padding-top: 29px;
+    font-family: "Inter";
+    width: 100%;
+    font-size: var(--desc-desktop);
+    color: var(--black);
+    font-weight: 300;
+    letter-spacing: -1px;
+    text-align: justify;
+
+
+}
+
+/* ----------------------------------
+   BOTTOM LEFT MUSIC INFO
+---------------------------------- */
+.music-info {
+    position: absolute;
+    left: 32px;
+    bottom: 32px;
+    background: var(--white);
+    border: 1px solid var(--black);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+#music-toggle img {
+    width: 50px;
+    height: 52px;
+}
+
+.track-text {
+
+    display: flex;
+    flex-direction: column;
+    padding: 10px 25px 10px 10px;
+    justify-content: center;
+    align-items: start;
+    font-size: 14px;
+    letter-spacing: -1px;
+
+}
+
+.track-text span {
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: 200;
+    font-style: italic;
+    letter-spacing: -0.5px;
+}
+
+/* ----------------------------------
+   BOTTOM CENTER AUDIO PLAYER
+---------------------------------- */
+.audio-player {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;
+    height: 42px;
+    background: var(--white);
+    border-radius: 8px;
+    border: 2px solid var(--black);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 12px;
+}
+
+.play-btn,
+.mute-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+}
+
+.timeline {
+    flex: 1;
+    height: 4px;
+    background: #ddd;
+    position: relative;
+    border-radius: 2px;
+}
+
+.timeline .progress {
+    position: absolute;
+    height: 4px;
+    background: var(--black);
+    width: 0%;
+}
+
+/* ----------------------------------
+   BOTTOM RIGHT ARTWORK
+---------------------------------- */
+.silhouette {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    bottom: 0;
+}
+
+.silhouette img {
+    height: 46vh;
+    width: auto;
+    object-fit: contain;
+}
+
+.image-show-tablet {
+    display: none;
+
+}
+
+/* ----------------------------------
+   RESPONSIVE – TABLET
+---------------------------------- */
+
+
+
+
+
+
+
+
+
+/* CARD BASE */
+.logo-card {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease;
+    will-change: transform;
+    cursor: pointer;
+}
+
+.logo-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    transform: translateZ(0);
+}
+
+#tilt-card {
+    transform-style: preserve-3d;
+    perspective: -1000px;
+    /* reversed */
+}
+
+
+
+
+
+
+
+
+@keyframes quiet {
+    25% {
+        transform: scaleY(.6);
+    }
+
+    50% {
+        transform: scaleY(.4);
+    }
+
+    75% {
+        transform: scaleY(.8);
+    }
+}
+
+@keyframes normal {
+    25% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(.4);
+    }
+
+    75% {
+        transform: scaleY(.6);
+    }
+}
+
+@keyframes loud {
+    25% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(.4);
+    }
+
+    75% {
+        transform: scaleY(1.2);
+    }
+}
+
+.music-player-wrapper {
+    height: 100%;
+    padding: 10px;
+    border-right: 1px solid var(--black);
+}
+
+.musicBarWrapper {
+
+    display: flex;
+    justify-content: space-between;
+    height: 45px;
+    --boxSize: 5px;
+    --gutter: 4px;
+    width: calc((var(--boxSize) + var(--gutter)) * 4);
+}
+
+.bar {
+    transform: scaleY(.4);
+    height: 100%;
+    width: var(--boxSize);
+    background: var(--black);
+    animation-duration: 2.2s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    border-radius: 8px;
+    animation-play-state: paused;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.musicBarWrapper.playing .bar {
+    animation-play-state: running;
+}
+
+#music-toggle.paused .bar {
+    animation: none;
+    transform: scaleY(.4);
+
+}
+
+
+.bar1 {
+    animation-name: quiet;
+}
+
+.bar2 {
+    animation-name: normal;
+}
+
+.bar3 {
+    animation-name: quiet;
+}
+
+.bar4 {
+    animation-name: loud;
+}
+
+.bar5 {
+    animation-name: quiet;
+}
+
+
+
+
+
+
+/* dots animation */
+
+.dots span {
+    /* animation: dotFlash 2s infinite alternate ease-in-out; */
+}
+
+@keyframes dotFlash {
+    0% {
+        background-color: var(--black);
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        background-color: rgba(0, 0, 0, 0.25);
+        opacity: 0.1;
+    }
+}
+
+.dots-top span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dots-top span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.dots-top span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.dots-top span:nth-child(4) {
+    animation-delay: 0.45s;
+}
+
+.dots-top span:nth-child(5) {
+    animation-delay: 0.6s;
+}
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width:1500px) {
+
+    .logo-card {
+        margin-left: 11%;
+        width: 382px;
+        height: 473px;
+    }
+
+    .text-block {
+        max-width: 508px;
+    }
+
+    .logo-card {
+        margin-right: 60px;
+    }
+
+
+    .silhouette {
+        right: -6%;
+
+    }
+
+    .title {
+        padding-bottom: 21px;
+    }
+
+    .description {
+        padding-top: 25px;
+        font-size: 16px;
+
+    }
+
+}
+
+
+@media (max-width:1320px) {
+
+    .logo-card {
+        margin-left: 12%;
+        width: 321px;
+        height: 397px;
+    }
+
+    .text-block {
+        max-width: 508px;
+    }
+
+    .logo-card {
+        margin-right: 42px;
+    }
+
+
+
+    .silhouette {
+        right: -8%;
+
+    }
+
+    .music-player-wrapper {
+        padding: 5px 10px;
+
+    }
+
+    .title {
+        padding-bottom: 19px;
+    }
+
+    .description {
+        padding-top: 22px;
+        font-size: 16px;
+
+    }
+
+    .dots-top {
+
+        left: 55%;
+    }
+
+    .dots-bottom {
+
+        left: 45%;
+    }
+
+}
+
+@media (max-width:991px) {
+
+
+
+    .content {
+        padding: 30% 14%;
+        gap: 43px;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+    }
+
+    .logo-card {
+        margin-left: 0;
+        width: 321px;
+        height: 397px;
+        margin-right: 42px;
+    }
+
+    .text-block {
+        padding-top: 0;
+        max-width: 508px;
+    }
+
+    .silhouette {
+        height: 173px;
+        right: 0;
+        top: unset;
+        bottom: 0;
+
+    }
+
+
+    .silhouette img {
+        height: auto;
+        right: 0;
+
+    }
+
+    .music-player-wrapper {
+        padding: 5px 10px;
+
+    }
+
+    .title {
+        padding-bottom: 6px;
+    }
+
+    .description {
+        padding-top: 6px;
+        font-size: 16px;
+
+    }
+
+    .image-hide-tablet {
+        display: none;
+    }
+
+    .image-show-tablet {
+
+        display: block;
+        object-fit: contain;
+        width: auto;
+    }
+
+    .logo-card::before {
+        top: unset;
+        bottom: 0;
+
+    }
+
+    .dots-top,
+    .dots-bottom {
+        display: none;
+    }
+
+    .grid-bg::after {
+
+        top: 40%;
+    }
+
+    .dots-left {
+        top: 40%;
+    }
+
+}
+
+
+
+@media (max-width:768px) {
+
+    #hero {
+        height: 100%;
+        padding: 12px;
+    }
+
+    .frame {
+        height: 100%;
+
+    }
+
+
+    .title-image {
+
+        left: 16px;
+        top: 16px;
+        width: 84px;
+        height: 42px;
+    }
+
+    .content {
+        padding: 26% 30px 45% 30px;
+        gap: 30px;
+
+    }
+
+    .logo-card {
+        margin-left: 0;
+        width: 100%;
+        max-width: 353px;
+        height: 349px;
+        margin-right: 0;
+    }
+
+
+
+    .logo-card::before {
+        display: none;
+    }
+
+    .text-block {
+        padding-top: 0;
+        max-width: 508px;
+    }
+
+    .stamp-image-wrapper {
+        top: -8%;
+        right: -5%;
+    }
+
+    .silhouette {
+        height: 173px;
+        right: 0;
+        top: unset;
+        bottom: 0;
+
+    }
+
+
+    .silhouette img {
+        height: auto;
+        right: 0;
+
+    }
+
+    .music-player-wrapper {
+        padding: 5px 10px;
+
+    }
+
+    .title {
+        padding-bottom: 4px;
+        font-size: 42px;
+        line-height: 100%;
+        letter-spacing: -3px;
+    }
+
+    .description {
+        padding-top: 4px;
+        font-size: 14px;
+
+    }
+
+    .image-show-tablet {
+
+        display: none;
+    }
+
+    .logo-card::before {
+        top: unset;
+        bottom: 0;
+
+    }
+
+    .dots-top,
+    .dots-bottom {
+        display: none;
+    }
+
+    .grid-bg::after {
+
+        top: 40%;
+    }
+
+    .dots-left {
+        display: none;
+    }
+
+    .explore-btn {
+        left: 28px;
+        bottom: 54px;
+        top: unset;
+        right: unset;
+    }
+
+    .music-info {
+        top: 16px;
+        right: 16px;
+        bottom: unset;
+        left: unset;
+
+    }
+
+    .musicBarWrapper {
+
+        height: 35px;
+        width: calc((var(--boxSize) + var(--gutter)) * 3);
+    }
+
+    .music-player-wrapper {
+        padding: 5px 6px 0px;
+    }
+
+    .track-text {
+        display: none;
+    }
+
+    .bar {
+        height: 80%;
+        width: 3px;
+    }
+
+    .stamp-image-center {
+        width: 25px;
+        height: 18px;
+
+    }
+
+    .stamp-image-wrapper .rotateimgtext {
+        width: 52px;
+        height: 52px;
+    }
+
+    .stamp-image-wrapper .rotateimgtext img {
+        width: 52px;
+        height: 52px;
+    }
+}
+
+
+@media (max-width:350px) {
+    #hero {
+        height: 100%;
+        min-height: 800px;
+    }
+
+    .title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width:377px) {
+    #hero {
+        height: 100%;
+        min-height: 800px;
+    }
+
+
+}

@@ -1,0 +1,93 @@
+:root {
+    --bg-black: #000;
+    --bg-white: #fff;
+    --text-black: #000;
+    --radius-card: 20px;
+    --dot-size: 6px;
+    --transition-fast: 0.3s;
+
+
+    /* FONT FAMILIES */
+    --font-title: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+
+    /* FONT SIZES (DESKTOP BASE) */
+    --fs-title: 3.5rem;
+    --fs-body: 1rem;
+
+
+    /* TABLET FONT SIZES */
+    --fs-title-tab: 2.8rem;
+    --fs-body-tab: 0.95rem;
+
+
+    /* MOBILE FONT SIZES */
+    --fs-title-mob: 2rem;
+    --fs-body-mob: 0.9rem;
+
+
+}
+
+
+body {
+    background: var(--bg-black);
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+
+
+
+.content h1 {
+font-family: var(--font-title);
+font-size: var(--fs-title);
+font-weight: 700;
+color: var(--text-black);
+}
+.content p {
+font-family: var(--font-body);
+width: 70%;
+margin: auto;
+font-size: var(--fs-body);
+line-height: 1.6;
+color: var(--text-black);
+}
+
+
+.music-btn {
+position: absolute;
+top: 20px;
+right: 20px;
+background: var(--bg-black);
+color: var(--bg-white);
+padding: 10px 15px;
+border-radius: 8px;
+}
+
+
+@media (max-width: 767px) {
+body { overflow: auto; }
+.wrapper { height: auto; padding: 30px 0; }
+.main-card { height: auto; padding: 40px 0; }
+
+
+/* MOBILE FONT SIZES */
+.content h1 { font-size: var(--fs-title-mob); }
+.content p { font-size: var(--fs-body-mob); width: 90%; }
+}
+
+
+@media (min-width: 768px) and (max-width: 1024px) {
+/* TABLET FONT SIZES */
+.content h1 { font-size: var(--fs-title-tab); }
+.content p { font-size: var(--fs-body-tab); }
+}
+.wrapper { height: auto; padding: 30px 0; }
+.main-card {
+height: auto;
+padding: 40px 0;
+}
+.content h1 { font-size: 2rem; }
+.content p { width: 90%; }
+

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loko | Brewing Soon</title>
+    <link rel="stylesheet" href="/assets/css/global.css" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+
+</head>
+
+<body>
+
+    <main id="hero">
+
+        <!-- FRAME WITH ROUNDED BORDER -->
+        <div class="frame">
+
+            <!-- BACKGROUND GRID LINES -->
+            <div class="grid-bg"></div>
+
+            <!-- DOTS — TOP CENTER -->
+            <div class="dots dots-top">
+
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- DOTS — LEFT VERTICAL -->
+            <div class="dots dots-left">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- DOTS — BOTTOM CENTER -->
+            <div class="dots dots-bottom">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- TOP LEFT TITLE IMAGE -->
+            <a href="/" class="title-image">
+                <img src="assets/images/loko-title.webp" alt="Cafe Scene">
+            </a>
+
+            <!-- TOP RIGHT BUTTON -->
+            <a href="https://www.thehouseofmakeba.com/" class="explore-btn">
+                <div class="btn-text">
+                    <strong>Explore Makeba</strong>
+                    <p>The Culinary Heaven</p>
+                </div>
+                <div class="btn-icon-wrapper">
+                    <img src="/assets/images/small-title.webp" alt="The House of Makeba" class="btn-icon">
+
+                </div>
+            </a>
+
+            <!-- MAIN CONTENT WRAPPER -->
+            <section class="content">
+
+                <!-- LEFT: CARD WITH LOGO (3D tilt will apply here) -->
+                <div class="logo-card" id="tilt-card">
+                    <img src="assets/images/loko-card.webp" alt="Makeba Logo" class="logo-main">
+
+                </div>
+
+                <!-- RIGHT: TEXT BLOCK -->
+                <div class="text-block">
+
+                    <!-- TITLE -->
+                    <div class="title-wrapper">
+                        <h1 class="title">brewing soon.</h1>
+                        <div class="stamp-image-wrapper">
+                            <div class="stamp-image-center"><img src="/assets/images/animation-title.webp" width="50"
+                                    height="30" alt="The House of Makeba"></div>
+                            <div class="rotateimgtext"><img src="assets/images/animation-round.webp" width="90"
+                                    height="90" alt="The House of Makeba" /></div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- STAMP IMAGE -->
+
+
+
+                    <!-- DESCRIPTION -->
+                    <p class="description">
+                        A whisper of something extraordinary is on the horizon. We invite you into a
+                        gathering place where every sip, every bite, and every moment is crafted with
+                        intention. Here, we’ll blend bold flavors, subtle elegance, and the warmth of
+                        community into a café experience unlike any you’ve known.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- BOTTOM LEFT MUSIC INFORMATION -->
+
+
+            <div class="music-info">
+                <audio id="bg-music" src="/assets/music/loko-music.mp3" loop autoplay></audio>
+
+                <div class="music-player-wrapper">
+                    <button class="musicBarWrapper" id="music-toggle">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                        <div class="bar bar4"></div>
+                        <!-- <div class="bar bar5"></div> -->
+                    </button>
+
+                </div>
+
+                <div class="track-text">
+                    <strong>Cafe Jazz Music</strong>
+                    <span>By John Doe</span>
+                </div>
+            </div>
+
+
+
+            <!-- BOTTOM RIGHT ARTWORK -->
+            <div class="silhouette">
+                <img src="assets/images/loko-cafe.webp" class="image-hide-tablet" alt="Cafe Scene">
+                <img src="assets/images/loko-cafe-tablet.webp" class="image-show-tablet" alt="Cafe Scene">
+            </div>
+
+        </div> <!-- end frame -->
+    </main>
+
+
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/dots.js"></script>
+    <script defer src="/assets/js/music.js"></script>
+    <script defer src="/assets/js/card.js"></script>
+
+</body>
+
+</html>
