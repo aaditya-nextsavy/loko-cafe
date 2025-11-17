@@ -1030,6 +1030,7 @@ body {
 @media (max-width:530px) {
     .main-content-warapper {
         align-items: center;
+        gap: 25px;
     }
 
     .title-wrapper {
