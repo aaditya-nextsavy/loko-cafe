@@ -17,8 +17,8 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/images/web-app-manifest-512x512.png">
     <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="/assets/css/global.css" />
-    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/global.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
 
 </head>
 
@@ -124,15 +124,21 @@
 
             <!-- BOTTOM LEFT MUSIC INFORMATION -->
             <div class="music-info">
-                <audio id="bg-music" src="/assets/music/loko-music.mp3" loop autoplay></audio>
-
+                <audio id="bg-music" src="assets/music/loko-music.mp3" loop autoplay></audio>
+                <!-- <audio id="bg-music" loop>
+                    <source src="/assets/music/loko-music.mp3" type="audio/mpeg"  >
+                </audio> -->
                 <div class="music-player-wrapper">
-                    <button class="musicBarWrapper" id="music-toggle" aria-label="Toggle music">
+                    <button class="musicBarWrapper paused" id="music-toggle" aria-label="Toggle music">
                         <div class="loading-wave">
                             <div class="loading-bar"></div>
                             <div class="loading-bar"></div>
                             <div class="loading-bar"></div>
                             <div class="loading-bar"></div>
+                        </div>
+
+                        <div class="placeholder-play-btn"  aria-hidden="true">
+
                         </div>
                     </button>
 
@@ -161,6 +167,7 @@
 
     <script defer src="/assets/js/music.js"></script>
     <script defer src="/assets/js/card.js"></script>
+   
 
 </body>
 
