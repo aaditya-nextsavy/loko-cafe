@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
         button.setAttribute("aria-pressed", isPlaying);
     };
 
-    // Try autoplay
     music.play()
         .then(updateUI)
         .catch(() => {
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
             updateUI();
         });
 
-    // Toggle play/pause on click
     button.addEventListener("click", () => {
         if (music.paused) {
             music.play().then(updateUI);
@@ -27,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Optional: handle audio load errors
     music.onerror = () => {
         console.error("Error loading audio");
         button.classList.add("paused");
