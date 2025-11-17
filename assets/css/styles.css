@@ -1,28 +1,19 @@
-/* ----------------------------------
-   VARIABLES
----------------------------------- */
 :root {
     --font-main: "Inter", sans-serif;
 
-    /* Title sizes */
     --title-desktop: 72px;
     --title-tablet: 3rem;
     --title-mobile: 2.4rem;
 
-    /* Description sizes */
     --desc-desktop: 18px;
     --desc-mobile: 0.95rem;
 
-    /* Frame */
     --frame-radius: 24px;
     --frame-radius-mobile: 12px;
-
     --frame-border: 4px;
 
-    /* Colors */
     --black: #000000;
     --white: #ffffff;
-    --gray: #666;
 }
 
 
@@ -67,21 +58,15 @@
 }
 
 
-
-
-
-/* ----------------------------------
-   GLOBAL
----------------------------------- */
 body {
     font-family: var(--font-main);
     background: var(--black);
     color: var(--black);
     overflow: hidden;
-    /* desktop/tablet – overridden on mobile */
+
 }
 
-/* MAIN HERO */
+/* MAIN*/
 #hero {
     width: 100vw;
     height: 100vh;
@@ -91,9 +76,7 @@ body {
     align-items: center;
 }
 
-/* ----------------------------------
-   FRAME
----------------------------------- */
+/* FRAME */
 .frame {
     width: 100%;
     height: 100%;
@@ -106,9 +89,8 @@ body {
 
 
 
-/* ----------------------------------
-   BACKGROUND GRID LINES (CSS ONLY)
----------------------------------- */
+/* BACKGROUND GRID */
+
 .grid-bg::before,
 .grid-bg::after {
     content: "";
@@ -122,14 +104,6 @@ body {
     position: absolute;
 }
 
-/* Vertical center line */
-.grid-bg::before {
-    width: 0px;
-    height: 100%;
-    left: 25%;
-    top: 0;
-}
-
 /* Horizontal center line */
 .grid-bg::after {
     height: 1px;
@@ -138,9 +112,7 @@ body {
     top: 50%;
 }
 
-/* ----------------------------------
-   DOTS (top center, left, bottom)
----------------------------------- */
+/*  DOTS (top center, left, bottom) */
 .dots span {
     width: 6px;
     height: 6px;
@@ -290,10 +262,8 @@ body {
 
 
 
-/* ----------------------------------
-   MAIN CONTENT LAYOUT
----------------------------------- */
-.content {
+/* MAIN CONTENT */
+.main-content-warapper {
     display: flex;
     align-items: center;
     width: 100%;
@@ -305,9 +275,6 @@ body {
 .logo-card {
     width: 440px;
     height: 542px;
-    /* border: 5px solid var(--black); */
-    /* border-radius: 6px; */
-    /* background: var(--white); */
     z-index: 1;
     position: relative;
     margin-left: 12.5%;
@@ -335,27 +302,87 @@ body {
     display: block;
 }
 
-.logo-card .logo-subtext {
-    text-align: center;
-    font-size: 0.75rem;
-    margin-top: 6px;
+
+
+/* CARD BASE */
+.logo-card {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease;
+    will-change: transform;
+    cursor: pointer;
 }
 
-.logo-card .logo-lang {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 32px;
-    margin-top: 18px;
-    font-size: 1rem;
+.logo-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    transform: translateZ(0);
 }
 
-/* ----------------------------------
-   RIGHT SIDE TEXT BLOCK
----------------------------------- */
+#tilt-card {
+    transform-style: preserve-3d;
+    perspective: -1000px;
+
+}
+
+
+
+@keyframes quiet {
+    25% {
+        transform: scaleY(.6);
+    }
+
+    50% {
+        transform: scaleY(.4);
+    }
+
+    75% {
+        transform: scaleY(.8);
+    }
+}
+
+@keyframes normal {
+    25% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(.4);
+    }
+
+    75% {
+        transform: scaleY(.6);
+    }
+}
+
+@keyframes loud {
+    25% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(.4);
+    }
+
+    75% {
+        transform: scaleY(1.2);
+    }
+}
+
+
+
+/*  RIGHT  TEXT BLOCK */
 .text-block {
     padding-top: 20px;
     flex: 1;
     max-width: 600px;
+    position: relative;
+}
+
+.title-wrapper {
+    display: inline-flex;
     position: relative;
 }
 
@@ -369,17 +396,9 @@ body {
     line-height: 100%;
     letter-spacing: -4px;
     text-wrap: nowrap;
-
 }
-
-.title-wrapper {
-    display: inline-flex;
-    position: relative;
-}
-
 
 .stamp-image-wrapper {
-
     position: absolute;
     top: -30%;
     right: -8%;
@@ -391,7 +410,6 @@ body {
 .stamp-image-center {
     width: 57px;
     height: 42px;
-    /* aspect-ratio: 58/41; */
     position: relative;
     z-index: 1;
 }
@@ -452,9 +470,7 @@ body {
 
 }
 
-/* ----------------------------------
-   BOTTOM LEFT MUSIC INFO
----------------------------------- */
+/*BOTTOM LEFT MUSIC INFO */
 .music-info {
     position: absolute;
     left: 32px;
@@ -491,50 +507,8 @@ body {
     letter-spacing: -0.5px;
 }
 
-/* ----------------------------------
-   BOTTOM CENTER AUDIO PLAYER
----------------------------------- */
-.audio-player {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 420px;
-    height: 42px;
-    background: var(--white);
-    border-radius: 8px;
-    border: 2px solid var(--black);
-    display: flex;
-    align-items: center;
-    padding: 0 14px;
-    gap: 12px;
-}
 
-.play-btn,
-.mute-btn {
-    background: none;
-    border: none;
-    font-size: 1rem;
-}
-
-.timeline {
-    flex: 1;
-    height: 4px;
-    background: #ddd;
-    position: relative;
-    border-radius: 2px;
-}
-
-.timeline .progress {
-    position: absolute;
-    height: 4px;
-    background: var(--black);
-    width: 0%;
-}
-
-/* ----------------------------------
-   BOTTOM RIGHT ARTWORK
----------------------------------- */
+/* BOTTOM RIGHT ARTWORK */
 .silhouette {
     position: absolute;
     right: 0px;
@@ -551,90 +525,6 @@ body {
 .image-show-tablet {
     display: none;
 
-}
-
-/* ----------------------------------
-   RESPONSIVE – TABLET
----------------------------------- */
-
-
-
-
-
-
-
-
-
-/* CARD BASE */
-.logo-card {
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    transition: transform 0.15s ease;
-    will-change: transform;
-    cursor: pointer;
-}
-
-.logo-card img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 6px;
-    transform: translateZ(0);
-}
-
-#tilt-card {
-    transform-style: preserve-3d;
-    perspective: -1000px;
-    /* reversed */
-}
-
-
-
-
-
-
-
-
-@keyframes quiet {
-    25% {
-        transform: scaleY(.6);
-    }
-
-    50% {
-        transform: scaleY(.4);
-    }
-
-    75% {
-        transform: scaleY(.8);
-    }
-}
-
-@keyframes normal {
-    25% {
-        transform: scaleY(1);
-    }
-
-    50% {
-        transform: scaleY(.4);
-    }
-
-    75% {
-        transform: scaleY(.6);
-    }
-}
-
-@keyframes loud {
-    25% {
-        transform: scaleY(1);
-    }
-
-    50% {
-        transform: scaleY(.4);
-    }
-
-    75% {
-        transform: scaleY(1.2);
-    }
 }
 
 .music-player-wrapper {
@@ -699,9 +589,6 @@ body {
 
 
 
-
-
-
 /* dots animation */
 
 .dots span {
@@ -742,15 +629,7 @@ body {
 }
 
 
-
-
-
-
-
-
-
-
-
+/* Responsiveness */
 @media (max-width:1500px) {
 
     .logo-card {
@@ -840,7 +719,7 @@ body {
 
 
 
-    .content {
+    .main-content-warapper {
         padding: 30% 14%;
         gap: 43px;
         flex-direction: column;
@@ -926,6 +805,12 @@ body {
 
 
 @media (max-width:768px) {
+    body {
+
+        overflow-y: auto;
+
+    }
+
 
     #hero {
         height: 100%;
@@ -946,7 +831,7 @@ body {
         height: 42px;
     }
 
-    .content {
+    .main-content-warapper {
         padding: 26% 30px 45% 30px;
         gap: 30px;
 
