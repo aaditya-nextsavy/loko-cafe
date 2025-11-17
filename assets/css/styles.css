@@ -705,7 +705,7 @@ body {
 }
 
 
-@media (max-width:1350px) {
+@media (max-width:1370px) {
 
     .logo-card-wrapper {
         margin-left: 12%;
@@ -751,7 +751,7 @@ body {
 
 }
 
-@media (max-width:1235px) {
+@media (max-width:1280px) {
     .image-hide-tablet {
         display: none;
     }
