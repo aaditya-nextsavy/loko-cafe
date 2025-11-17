@@ -272,7 +272,44 @@ body {
 }
 
 /* LEFT CARD */
+
+
+.logo-card-wrapper {
+    position: relative;
+    width: 440px;
+    /* match original .logo-card width */
+    height: 542px;
+    /* match original height */
+    margin-left: 12.5%;
+    margin-right: 90px;
+    z-index: 1;
+}
+
+/* Move ::before here */
+.logo-card-wrapper::before {
+    content: "";
+    position: absolute;
+    background: var(--black);
+    width: 1px;
+    height: 200vh;
+    left: 50%;
+    top: -50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
 .logo-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.25s ease;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    will-change: transform;
+    cursor: pointer;
+}
+
+/* .logo-card {
     width: 440px;
     height: 542px;
     z-index: 1;
@@ -280,9 +317,9 @@ body {
     margin-left: 12.5%;
     margin-right: 90px;
     transition: transform 0.25s ease;
-}
+} */
 
-.logo-card::before {
+/* .logo-card::before {
     content: "";
     position: absolute;
     background: var(--black);
@@ -292,7 +329,7 @@ body {
     top: -50%;
     z-index: 0;
 
-}
+} */
 
 .logo-card img.logo-main {
     position: relative;
@@ -527,6 +564,7 @@ body {
 
 }
 
+
 .music-player-wrapper {
     height: 100%;
     padding: 10px;
@@ -629,27 +667,29 @@ body {
 }
 
 
+
+
 /* Responsiveness */
-@media (max-width:1500px) {
 
-    .logo-card {
-        margin-left: 11%;
-        width: 382px;
-        height: 473px;
-    }
-
-    .text-block {
-        max-width: 508px;
-    }
-
-    .logo-card {
-        margin-right: 60px;
-    }
-
+@media (max-width:1740px) {
 
     .silhouette {
         right: -6%;
 
+    }
+
+}
+
+@media (max-width:1600px) {
+    .text-block {
+        max-width: 508px;
+    }
+
+    .logo-card-wrapper {
+        margin-left: 11%;
+        width: 382px;
+        height: 473px;
+        margin-right: 60px;
     }
 
     .title {
@@ -665,10 +705,13 @@ body {
 }
 
 
+
+
 @media (max-width:1320px) {
 
-    .logo-card {
+    .logo-card-wrapper {
         margin-left: 12%;
+        margin-right: 42px;
         width: 321px;
         height: 397px;
     }
@@ -676,11 +719,6 @@ body {
     .text-block {
         max-width: 508px;
     }
-
-    .logo-card {
-        margin-right: 42px;
-    }
-
 
 
     .silhouette {
@@ -715,28 +753,16 @@ body {
 
 }
 
-@media (max-width:991px) {
-
-
-
-    .main-content-warapper {
-        padding: 30% 14%;
-        gap: 43px;
-        flex-direction: column;
-        align-items: start;
-        justify-content: center;
+@media (max-width:1235px) {
+    .image-hide-tablet {
+        display: none;
     }
 
-    .logo-card {
-        margin-left: 0;
-        width: 321px;
-        height: 397px;
-        margin-right: 42px;
-    }
+    .image-show-tablet {
 
-    .text-block {
-        padding-top: 0;
-        max-width: 508px;
+        display: block;
+        object-fit: contain;
+        width: auto;
     }
 
     .silhouette {
@@ -753,6 +779,33 @@ body {
         right: 0;
 
     }
+}
+
+@media (max-width:1080px) {
+
+
+
+    .main-content-warapper {
+        padding: 30% 14%;
+        gap: 43px;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+    }
+
+    .logo-card-wrapper {
+        margin-left: 0;
+        width: 321px;
+        height: 397px;
+        margin-right: 42px;
+    }
+
+    .text-block {
+        padding-top: 0;
+        max-width: 508px;
+    }
+
+
 
     .music-player-wrapper {
         padding: 5px 10px;
@@ -769,18 +822,8 @@ body {
 
     }
 
-    .image-hide-tablet {
-        display: none;
-    }
 
-    .image-show-tablet {
-
-        display: block;
-        object-fit: contain;
-        width: auto;
-    }
-
-    .logo-card::before {
+    .logo-card-wrapper::before {
         top: unset;
         bottom: 0;
 
@@ -798,6 +841,13 @@ body {
 
     .dots-left {
         top: 40%;
+    }
+
+    #tilt-card {
+
+        transform: none !important;
+        perspective: none !important;
+
     }
 
 }
@@ -837,7 +887,7 @@ body {
 
     }
 
-    .logo-card {
+    .logo-card-wrapper {
         margin-left: 0;
         width: 100%;
         max-width: 353px;
@@ -847,7 +897,7 @@ body {
 
 
 
-    .logo-card::before {
+    .logo-card-wrapper::before {
         display: none;
     }
 
@@ -894,12 +944,7 @@ body {
 
     }
 
-    .image-show-tablet {
-
-        display: none;
-    }
-
-    .logo-card::before {
+    .logo-card-wrapper::before {
         top: unset;
         bottom: 0;
 
@@ -970,6 +1015,14 @@ body {
     }
 }
 
+@media (max-width:630px) {
+
+    .image-show-tablet {
+
+        display: none;
+    }
+
+}
 
 @media (max-width:350px) {
     #hero {

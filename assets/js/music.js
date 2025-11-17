@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const music = document.getElementById("bg-music");
     const button = document.getElementById("music-toggle");
 
-    // Try autoplay
+    // autoplay
     const tryPlay = () => {
         music.play()
             .then(() => {
