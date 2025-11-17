@@ -2,30 +2,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const music = document.getElementById("bg-music");
     const button = document.getElementById("music-toggle");
 
-    // autoplay
-    const tryPlay = () => {
-        music.play()
-            .then(() => {
-                button.classList.add("playing");
-                button.classList.remove("paused");
-            })
-            .catch(() => {
-                console.log("Autoplay blocked — waiting for user interaction");
-                button.classList.add("paused");
-            });
+    const updateUI = () => {
+        const isPlaying = !music.paused;
+        button.classList.toggle("playing", isPlaying);
+        button.classList.toggle("paused", !isPlaying);
+        button.setAttribute("aria-pressed", isPlaying);
     };
 
-    tryPlay();
+    // Try autoplay
+    music.play()
+        .then(updateUI)
+        .catch(() => {
+            console.log("Autoplay blocked — waiting for user interaction");
+            updateUI();
+        });
 
+    // Toggle play/pause on click
     button.addEventListener("click", () => {
         if (music.paused) {
-            music.play();
-            button.classList.add("playing");
-            button.classList.remove("paused");
+            music.play().then(updateUI);
         } else {
             music.pause();
-            button.classList.add("paused");
-            button.classList.remove("playing");
+            updateUI();
         }
     });
+
+    // Optional: handle audio load errors
+    music.onerror = () => {
+        console.error("Error loading audio");
+        button.classList.add("paused");
+        button.classList.remove("playing");
+    };
 });
