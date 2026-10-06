@@ -1,13 +1,6 @@
 :root {
     --font-main: "Inter", sans-serif;
 
-    --title-desktop: 72px;
-    --title-tablet: 3rem;
-    --title-mobile: 2.4rem;
-
-    --desc-desktop: 18px;
-    --desc-mobile: 0.95rem;
-
     --frame-radius: 24px;
     --frame-radius-mobile: 12px;
     --frame-border: 4px;
@@ -29,6 +22,22 @@
     font-family: "Inter";
     src: url("/assets/fonts/static/Inter_18pt-Light.ttf") format("truetype");
     font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/static/Inter_18pt-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/assets/fonts/static/Inter_18pt-SemiBold.ttf") format("truetype");
+    font-weight: 600;
     font-style: normal;
     font-display: swap;
 }
@@ -63,7 +72,11 @@ body {
     background: var(--black);
     color: var(--black);
     overflow: hidden;
+}
 
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
 /* MAIN*/
@@ -88,31 +101,6 @@ body {
 }
 
 
-
-
-/* BACKGROUND GRID */
-
-.grid-bg::before,
-.grid-bg::after {
-    content: "";
-    position: absolute;
-    background: var(--black);
-}
-
-.grid-bg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-}
-
-/* Horizontal center line */
-.grid-bg::after {
-    height: 1px;
-    width: 100%;
-    left: 0;
-    top: 50%;
-}
-
 /*  DOTS (top center, left, bottom) */
 .dots span {
     width: 6px;
@@ -128,6 +116,7 @@ body {
     top: 32px;
     width: 96px;
     height: 48px;
+    z-index: 3;
 }
 
 /* TOP CENTER */
@@ -168,6 +157,7 @@ body {
     position: absolute;
     top: 32px;
     right: 32px;
+    z-index: 3;
     display: flex;
     align-items: center;
     border: 1.33px solid var(--black);
@@ -249,269 +239,523 @@ body {
 }
 
 .explore-btn .btn-icon {
-    width: 38px;
-    height: 28px;
+    width: 32px;
+    height: 22px;
     line-height: 100%;
     letter-spacing: -0.67px;
     transition: transform 0.8s ease;
 }
 
 .explore-btn:hover .btn-icon {
-    transform: scale(1.15);
+    transform: scale(1.05);
 }
 
 
 
 
-/* MAIN CONTENT */
-.main-content-warapper {
+/* ================================================================
+   LOCATIONS
+   All sizes are taken from the 1920x1080 Figma frame and scale down
+   from there. --card-w is the single source of truth for card size:
+   it is the smallest of the Figma width, a width-based fit and a
+   height-based fit (so everything fits the frame).
+   --peek cards are always visible (3 full + half of the next) so it's
+   obvious the row scrolls: when height makes the cards smaller, the
+   slider's left offset grows instead of extra cards squeezing in.
+   Vertical fit (everything stays inside 100vh, no scroll): the space
+   above the title absorbs spare height first (96px to 160px); only
+   when it reaches 96px do the cards get shorter.
+   ================================================================ */
+.locations {
+    --frame-w: calc(100vw - 48px);
+    --frame-h: calc(100vh - 48px);
+    /* left margin of title + slider (inside the frame) — steps per breakpoint */
+    --slider-left: 193px;
+    --end-gap: clamp(16px, 3.33vw, 64px);
+    --gap: clamp(16px, 2.19vw, 42px);
+    --title-size: clamp(34px, 3.34vw, 64px);
+    --title-gap: clamp(20px, 2.97vh, 32px);
+    --controls-gap: clamp(20px, 3.7vh, 40px);
+    --btn-size: 44px;
+    --controls-h: calc(var(--controls-gap) + var(--btn-size));
+    --bottom-reserve: 112px;
+    /* 3.54 keeps the Figma's 193px left offset at 1920; --gaps = full cards shown */
+    --peek: 3.54;
+    --gaps: 3;
+
+    --card-w-by-width: calc((var(--frame-w) - var(--slider-left) - var(--gaps) * var(--gap)) / var(--peek));
+    /* everything stacked in the frame except the space above the title and the card */
+    --fixed-h: calc(var(--title-size) + var(--title-gap) + var(--controls-h) + var(--bottom-reserve));
+    /* card size wanted by the width rules; height can only shrink it */
+    --card-w-pref: min(439px, var(--card-w-by-width));
+    --title-top: clamp(96px, calc(var(--frame-h) - var(--fixed-h) - var(--card-w-pref) * 1.2369), 160px);
+    --card-w-by-height: calc((var(--frame-h) - var(--title-top) - var(--fixed-h)) * 0.8085);
+    --card-w: max(240px, min(var(--card-w-pref), var(--card-w-by-height)));
+
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding-top: var(--title-top);
+    display: flex;
+    flex-direction: column;
+}
+
+.locations__title {
+    padding-left: var(--slider-left);
+    margin-bottom: var(--title-gap);
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: var(--title-size);
+    line-height: 100%;
+    letter-spacing: -0.047em;
+    text-transform: lowercase;
+}
+
+/* SLIDER (Embla) */
+.embla__viewport {
+    /* overflow stays visible so cards bleed to the frame edge (the frame clips) */
+    margin-left: var(--slider-left);
+    margin-right: var(--end-gap);
+    cursor: grab;
+}
+
+.embla__viewport:active {
+    cursor: grabbing;
+}
+
+.embla__container {
+    display: flex;
+    touch-action: pan-y pinch-zoom;
+}
+
+.embla__slide {
+    flex: 0 0 var(--card-w);
+    min-width: 0;
+    margin-right: var(--gap);
+    display: flex;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.embla__slide:last-child {
+    margin-right: 0;
+}
+
+.embla__controls {
     display: flex;
     align-items: center;
+    gap: 44px;
+    margin-top: var(--controls-gap);
+    margin-left: var(--slider-left);
+}
+
+.embla__progress {
+    width: 117px;
+    height: 4px;
+    background: #d9d9d9;
+    border-radius: 500px;
+    overflow: hidden;
+}
+
+.embla__progress-bar {
     width: 100%;
     height: 100%;
-
-}
-
-/* LEFT CARD */
-
-
-.logo-card-wrapper {
-    position: relative;
-    width: 440px;
-    /* match original .logo-card width */
-    height: 542px;
-    /* match original height */
-    margin-left: 12.5%;
-    margin-right: 90px;
-    z-index: 1;
-}
-
-/* Move ::before here */
-.logo-card-wrapper::before {
-    content: "";
-    position: absolute;
     background: var(--black);
-    width: 1px;
-    height: 200vh;
-    left: 50%;
-    top: -50%;
-    z-index: 0;
+    transform-origin: left center;
+    transform: scaleX(0.5);
+}
+
+.embla__buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.embla__button {
+    width: var(--btn-size);
+    height: var(--btn-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--black);
+    background: var(--white);
+    color: var(--black);
+    transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+.embla__button:hover:not(:disabled) {
+    background: var(--black);
+    color: var(--white);
+}
+
+.embla__button:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.embla.is-static .embla__controls {
+    visibility: hidden;
+}
+
+
+/* LOCATION CARD
+   --u = 1 Figma pixel at the current card size (card is 439px wide in Figma).
+   It is declared on the inner element so cqw resolves against .loc-card. */
+.loc-card {
+    flex: 1;
+    display: flex;
+    container-type: inline-size;
+    perspective: 2200px;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.loc-card__inner {
+    --u: calc(100cqw / 439);
+    --flip-ease: cubic-bezier(0.65, 0, 0.25, 1);
+
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    aspect-ratio: 439 / 543;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1.1s var(--flip-ease);
+    will-change: transform;
+}
+
+.loc-card__face {
+    grid-area: 1 / 1;
+    min-width: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--white);
+    border: max(3px, calc(6 * var(--u))) solid var(--black);
+    padding: calc(32 * var(--u)) calc(80 * var(--u)) calc(34 * var(--u));
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.loc-card__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
     pointer-events: none;
 }
 
-.logo-card {
-    width: 100%;
-    height: 100%;
+.loc-card__face>*:not(.loc-card__lines):not(.loc-card__hint) {
     position: relative;
-    transition: transform 0.25s ease;
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    will-change: transform;
-    cursor: pointer;
 }
 
-/* .logo-card {
-    width: 440px;
-    height: 542px;
-    z-index: 1;
-    position: relative;
-    margin-left: 12.5%;
-    margin-right: 90px;
-    transition: transform 0.25s ease;
-} */
+/* flip states */
+.loc-card.is-flipped .loc-card__inner,
+.loc-card:focus-visible .loc-card__inner,
+.loc-card:has(:focus-visible) .loc-card__inner {
+    transform: rotateY(180deg);
+}
 
-/* .logo-card::before {
-    content: "";
+.loc-card__face--back {
+    transform: rotateY(180deg);
+    pointer-events: none;
+}
+
+.loc-card.is-flipped .loc-card__face--back,
+.loc-card:focus-visible .loc-card__face--back,
+.loc-card:has(:focus-visible) .loc-card__face--back {
+    pointer-events: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .loc-card:hover .loc-card__inner {
+        transform: rotateY(180deg);
+        /* tiny delay so sweeping the cursor across cards doesn't flip every one */
+        transition-delay: 0.08s;
+    }
+
+    .loc-card:hover .loc-card__face--back {
+        pointer-events: auto;
+    }
+}
+
+.loc-card.is-intro .loc-card__inner {
+    transform: rotateY(180deg);
+    transition: none;
+}
+
+.loc-card {
+    position: relative;
+}
+
+/* Lives inside both faces so it turns with the card. Centred on the
+   card's top edge: half on the card, half above it. */
+.loc-card__hint {
+    display: none;
     position: absolute;
-    background: var(--black);
-    width: 1px;
-    height: 200vh;
+    /* top: 0 is the inner edge of the border, so move up by the border width */
+    top: calc(-1 * max(3px, calc(6 * var(--u))));
     left: 50%;
-    top: -50%;
-    z-index: 0;
-
-} */
-
-.logo-card img.logo-main {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-
-
-/* CARD BASE */
-.logo-card {
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    transition: transform 0.15s ease;
-    will-change: transform;
-    cursor: pointer;
-}
-
-.logo-card img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transform: translateZ(0);
-}
-
-#tilt-card {
-    transform-style: preserve-3d;
-    perspective: -1000px;
-
-}
-
-
-
-@keyframes quiet {
-    25% {
-        transform: scaleY(.6);
-    }
-
-    50% {
-        transform: scaleY(.4);
-    }
-
-    75% {
-        transform: scaleY(.8);
-    }
-}
-
-@keyframes normal {
-    25% {
-        transform: scaleY(1);
-    }
-
-    50% {
-        transform: scaleY(.4);
-    }
-
-    75% {
-        transform: scaleY(.6);
-    }
-}
-
-@keyframes loud {
-    25% {
-        transform: scaleY(1);
-    }
-
-    50% {
-        transform: scaleY(.4);
-    }
-
-    75% {
-        transform: scaleY(1.2);
-    }
-}
-
-
-
-/*  RIGHT  TEXT BLOCK */
-.text-block {
-    padding-top: 20px;
-    flex: 1;
-    max-width: 600px;
-    position: relative;
-}
-
-.title-wrapper {
-    display: inline-flex;
-    position: relative;
-}
-
-.title {
-    font-size: var(--title-desktop);
-    font-family: var(--font-main);
-    padding-bottom: 22px;
-    font-weight: 700;
-    text-transform: lowercase;
-    position: relative;
-    line-height: 100%;
-    letter-spacing: -4px;
-    text-wrap: nowrap;
-}
-
-.stamp-image-wrapper {
-    position: absolute;
-    top: -30%;
-    right: -8%;
-    display: flex;
-    justify-content: center;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 30px;
+    height: 30px;
     align-items: center;
-}
-
-.stamp-image-center {
-    width: 57px;
-    height: 42px;
-    position: relative;
-    z-index: 1;
-}
-
-.stamp-image-center img {
-    width: 100%;
-    height: 100%;
-}
-
-.stamp-image-wrapper .rotateimgtext {
-    width: 123px;
-    height: 123px;
-
-}
-
-.stamp-image-wrapper .rotateimgtext img {
-    object-fit: contain;
-    width: 123px;
-    height: 123px;
-
-}
-
-.rotateimgtext {
-    position: absolute;
-    margin-top: 5px;
-    animation: rotateText 15s linear infinite;
-    -webkit-animation: rotateText 15s linear infinite;
-}
-
-@keyframes rotateText {
-    100% {
-        transform: rotate(360deg);
-        -webkit-transform: rotate(360deg);
-        -moz-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-    }
-
-    0% {
-        transform: rotate(0deg);
-        -webkit-transform: rotate(0deg);
-        -moz-transform: rotate(0deg);
-        -ms-transform: rotate(0deg);
-        -o-transform: rotate(0deg);
-    }
-}
-
-.description {
-    padding-top: 29px;
-    font-family: "Inter";
-    width: 100%;
-    font-size: var(--desc-desktop);
+    justify-content: center;
+    border: 1px solid var(--black);
+    border-radius: 50%;
+    background: var(--white);
     color: var(--black);
-    font-weight: 300;
-    letter-spacing: -1px;
-    text-align: justify;
-
-
+    pointer-events: none;
 }
+
+@media (hover: none),
+(pointer: coarse) {
+    .loc-card__hint {
+        display: flex;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .loc-card__inner {
+        transition: none;
+    }
+}
+
+/* FRONT */
+.loc-card__title {
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: max(13px, calc(20 * var(--u)));
+    line-height: 100%;
+    letter-spacing: calc(2 * var(--u));
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.loc-card__image {
+    margin-top: calc(34 * var(--u));
+    width: calc(283 * var(--u));
+    height: calc(300 * var(--u));
+    max-width: none;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.loc-card__footer {
+    margin-top: auto;
+    padding-top: calc(23 * var(--u));
+    align-self: stretch;
+    margin-inline: calc(-61 * var(--u));
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.loc-card__word {
+    box-sizing: content-box;
+    height: calc(25 * var(--u));
+    width: auto;
+    max-width: none;
+    padding: calc(6 * var(--u)) 0;
+    background: var(--white);
+    margin-bottom: calc(4 * var(--u));
+}
+
+.loc-card__brand {
+    width: calc(191 * var(--u));
+    height: calc(85 * var(--u));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: calc(7 * var(--u));
+}
+
+.loc-card__brand img {
+    height: calc(52 * var(--u));
+    width: auto;
+    max-width: none;
+}
+
+.loc-card__brand span {
+    width: 100%;
+    padding-bottom: calc(6 * var(--u));
+    font-family: var(--font-main);
+    font-weight: 400;
+    font-size: max(7px, calc(10 * var(--u)));
+    line-height: 100%;
+    letter-spacing: calc(0.6 * var(--u));
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.loc-card__face--back {
+    --back-name: 20px;
+    --back-area: 14px;
+    --back-body: 16px;
+    --back-body-lh: 26px;
+    --back-label: 14px;
+    --back-phone: 16px;
+    --back-phone-lh: 30px;
+    --back-icon: 20px;
+    --back-btn: 14px;
+    --back-btn-h: 52px;
+    --back-tracking: 2px;
+    --back-pad-x: 80;
+    --back-divider: 32;
+
+    align-items: stretch;
+    padding-inline: calc(var(--back-pad-x) * var(--u));
+    padding-bottom: calc(32 * var(--u));
+}
+
+.loc-card__logo {
+    align-self: center;
+    width: calc(58 * var(--u));
+    height: calc(33 * var(--u));
+    max-width: none;
+    object-fit: contain;
+}
+
+.loc-card__name {
+    margin-top: calc(21 * var(--u));
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: var(--back-name);
+    line-height: 100%;
+    letter-spacing: var(--back-tracking);
+    text-align: center;
+}
+
+.loc-card__area {
+    margin-top: calc(6 * var(--u));
+    font-family: var(--font-main);
+    font-weight: 400;
+    font-size: var(--back-area);
+    line-height: 100%;
+    letter-spacing: var(--back-tracking);
+    text-align: center;
+}
+
+.loc-card__address {
+    margin-top: calc(24 * var(--u));
+    font-family: var(--font-main);
+    font-weight: 300;
+    font-size: var(--back-body);
+    line-height: var(--back-body-lh);
+    letter-spacing: -0.0625em;
+    text-align: justify;
+}
+
+.loc-card__directions {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: calc(6 * var(--u));
+    font-family: var(--font-main);
+    font-weight: 400;
+    font-size: var(--back-body);
+    line-height: var(--back-body-lh);
+    letter-spacing: -0.0625em;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-skip-ink: auto;
+}
+
+.loc-card__divider {
+    margin: calc(var(--back-divider) * var(--u)) 0;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.loc-card__label {
+    font-family: var(--font-main);
+    font-weight: 600;
+    font-size: var(--back-label);
+    line-height: 100%;
+    letter-spacing: 1px;
+}
+
+.loc-card__phone {
+    align-self: flex-start;
+    margin-top: calc(8 * var(--u));
+    margin-bottom: calc(24 * var(--u));
+    display: inline-flex;
+    align-items: center;
+    gap: calc(8 * var(--u));
+    font-family: var(--font-main);
+    font-weight: 400;
+    font-size: var(--back-phone);
+    line-height: var(--back-phone-lh);
+}
+
+.loc-card__phone>svg:first-child {
+    width: var(--back-icon);
+    height: auto;
+}
+
+.loc-card__directions svg,
+.loc-card__phone svg:last-child {
+    transition: transform 0.3s ease-in-out;
+}
+
+.loc-card__directions:hover svg,
+.loc-card__phone:hover svg:last-child {
+    transform: translateX(3px);
+}
+
+.loc-card__follow {
+    margin-top: auto;
+    min-height: var(--back-btn-h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--black);
+    font-family: var(--font-main);
+    font-weight: 600;
+    font-size: var(--back-btn);
+    line-height: 100%;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.loc-card__follow:hover {
+    background: var(--black);
+    color: var(--white);
+}
+
+.tagline {
+    position: absolute;
+    right: 32px;
+    bottom: 32px;
+    z-index: 3;
+}
+
+.tagline p {
+    font-family: var(--font-main);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    text-align: right;
+}
+
+.explore-btn-mobile {
+    display: none;
+}
+
 
 /*BOTTOM LEFT MUSIC INFO */
 .music-info {
     position: absolute;
     left: 32px;
     bottom: 32px;
+    z-index: 3;
     background: var(--white);
     border: 1px solid var(--black);
     border-radius: 4px;
@@ -545,26 +789,6 @@ body {
 }
 
 
-/* BOTTOM RIGHT ARTWORK */
-.silhouette {
-    position: absolute;
-    right: 0px;
-    top: 50%;
-    bottom: 0;
-}
-
-.silhouette img {
-    height: 46vh;
-    width: auto;
-    object-fit: contain;
-}
-
-.image-show-tablet {
-    display: none;
-
-}
-
-
 .music-player-wrapper {
     height: 100%;
     position: relative;
@@ -595,7 +819,7 @@ body {
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
-   
+
 }
 
 
@@ -609,13 +833,6 @@ body {
 
 .musicBarWrapper.playing .loading-wave {
     opacity: 1;
-}
-
-
-
-.mobile-explore-button-wrapper {
-    display: none;
-
 }
 
 
@@ -694,165 +911,209 @@ body {
 }
 
 
-
-
-/* Responsiveness */
-
-@media (max-width:1740px) {
-
-    .silhouette {
-        right: -6%;
-
+@media (min-width:1680px) {
+    .locations {
+        --card-w-pref: max(439px, var(--card-w-by-width));
     }
-
 }
 
-@media (max-width:1600px) {
-    .text-block {
-        max-width: 508px;
+@media (max-width:1679px),
+(max-height:1000px) {
+    .loc-card__face--back {
+        --back-name: 17px;
+        --back-area: 12px;
+        --back-body: 16px;
+        --back-body-lh: 22px;
+        --back-label: 12px;
+        --back-phone: 14px;
+        --back-phone-lh: 26px;
+        --back-icon: 18px;
+        --back-btn: 12px;
+        --back-btn-h: 44px;
+        --back-tracking: 1.5px;
+        --back-pad-x: 80;
+        --back-divider: 18;
     }
-
-    .logo-card-wrapper {
-        margin-left: 11%;
-        width: 382px;
-        height: 473px;
-        margin-right: 60px;
-    }
-
-    .title {
-        padding-bottom: 21px;
-    }
-
-    .description {
-        padding-top: 25px;
-        font-size: 16px;
-
-    }
-
 }
 
+@media (max-width:1366px) {
+    .loc-card__face--back {
+        --back-name: 15px;
+        --back-area: 11px;
+        --back-body: 13px;
+        --back-body-lh: 19px;
+        --back-label: 11px;
+        --back-phone: 13px;
+        --back-phone-lh: 24px;
+        --back-icon: 16px;
+        --back-btn: 11px;
+        --back-btn-h: 40px;
+        --back-tracking: 1.5px;
+        --back-pad-x: 40;
+        --back-divider: 32;
+    }
+}
 
-@media (max-width:1370px) {
+@media (min-width:769px) and (max-width:900px) {
+    .loc-card__face--back {
+        --back-name: 17px;
+        --back-area: 12px;
+        --back-body: 14px;
+        --back-body-lh: 21px;
+        --back-label: 12px;
+        --back-phone: 14px;
+        --back-phone-lh: 26px;
+        --back-icon: 18px;
+        --back-btn: 12px;
+        --back-btn-h: 44px;
+        --back-tracking: 1.5px;
+        --back-pad-x: 40;
+        --back-divider: 32;
+    }
+}
 
-    .logo-card-wrapper {
-        margin-left: 12%;
-        margin-right: 42px;
-        width: 321px;
-        height: 397px;
+@media (min-width:769px) and (max-width:1679px) {
+    .title-image {
+        width: 80px;
+        height: 40px;
     }
 
-    .text-block {
-        max-width: 508px;
+    .dots span {
+        width: 5px;
+        height: 5px;
     }
 
+    .dots-top,
+    .dots-left,
+    .dots-bottom {
+        gap: 13px;
+    }
 
-    .silhouette {
-        right: -8%;
+    .explore-btn .btn-text {
+        padding: 11px 16px 11px 12px;
+        font-size: 15px;
+        letter-spacing: -1px;
+    }
 
+    .explore-btn .btn-text p {
+        font-size: 13px;
+    }
+
+    .explore-btn .btn-icon-wrapper {
+        padding: 11px;
+    }
+
+    .explore-btn .btn-icon {
+        width: 27px;
+        height: 19px;
     }
 
     .music-player-wrapper {
-        padding: 5px 10px;
-
+        padding: 6px 8px;
     }
 
-    .title {
-        padding-bottom: 19px;
+    .musicBarWrapper {
+        height: 30px;
+        --boxSize: 4px;
     }
 
-    .description {
-        padding-top: 22px;
-        font-size: 16px;
-
+    .placeholder-play-btn {
+        width: 22px;
+        height: 22px;
     }
 
-    .dots-top {
-
-        left: 55%;
+    .track-text {
+        padding: 7px 18px 7px 9px;
+        font-size: 12px;
     }
 
-    .dots-bottom {
-
-        left: 45%;
+    .track-text span {
+        font-size: 11px;
     }
 
+    .tagline p {
+        font-size: 15px;
+    }
+
+    .locations {
+        --btn-size: 38px;
+        --bottom-reserve: 100px;
+    }
+
+    .embla__controls {
+        gap: 32px;
+    }
+
+    .embla__progress {
+        width: 100px;
+    }
 }
 
-@media (max-width:1280px) {
-    .image-hide-tablet {
+@media (min-width:769px) and (max-width:1366px) {
+    .title-image {
+        width: 72px;
+        height: 36px;
+    }
+
+    .explore-btn .btn-text {
+        font-size: 14px;
+    }
+
+    .explore-btn .btn-text p {
+        font-size: 12px;
+    }
+
+    .explore-btn .btn-icon-wrapper {
+        padding: 10px;
+    }
+
+    .tagline p {
+        font-size: 14px;
+    }
+
+    .locations {
+        --btn-size: 36px;
+    }
+}
+
+@media (max-width:1679px) {
+    .locations {
+        --slider-left: 144px;
+    }
+}
+
+@media (max-width:1366px) {
+    .locations {
+        --slider-left: 112px;
+    }
+
+    /* small laptops, tablets and phones: no sketch lines on the cards, so
+       the back's text can run wider (see --back-pad-x per breakpoint) */
+    .loc-card__lines {
         display: none;
-    }
-
-    .image-show-tablet {
-
-        display: block;
-        object-fit: contain;
-        width: auto;
-    }
-
-    .silhouette {
-        height: 173px;
-        right: 0;
-        top: unset;
-        bottom: 0;
-
-    }
-
-
-    .silhouette img {
-        height: auto;
-        right: 0;
-
     }
 }
 
 @media (max-width:1080px) {
+    .locations {
+        --slider-left: 64px;
+    }
+}
 
-
-
-    .main-content-warapper {
-        padding: 30% 14%;
-        gap: 43px;
-        flex-direction: column;
-        align-items: start;
-        justify-content: center;
+@media (max-width:1370px) {
+    .dots-top {
+        left: 55%;
     }
 
-    .logo-card-wrapper {
-        margin-left: 0;
-        width: 321px;
-        height: 397px;
-        margin-right: 42px;
-        aspect-ratio: 321/397;
+    .dots-bottom {
+        left: 45%;
     }
+}
 
-    .text-block {
-        padding-top: 0;
-        max-width: 508px;
-    }
-
-
-
-    .music-player-wrapper {
-        padding: 5px 10px;
-
-    }
-
-    .title {
-        padding-bottom: 6px;
-    }
-
-    .description {
-        padding-top: 6px;
-        font-size: 16px;
-
-    }
-
-
-    .logo-card-wrapper::before {
-        top: unset;
-        bottom: 0;
-
+@media (max-width:1080px) {
+    .locations {
+        --peek: 2.5;
+        --gaps: 2;
     }
 
     .dots-top,
@@ -860,155 +1121,224 @@ body {
         display: none;
     }
 
-    .grid-bg::after {
+    .tagline p {
+        font-size: 14px;
+    }
+}
 
-        top: 40%;
+@media (max-width:900px) {
+    .locations {
+        --peek: 1.5;
+        --gaps: 1;
+    }
+}
+
+@media (min-width:769px) and (max-width:1080px) and (orientation: portrait) {
+    .locations {
+        --title-size: 44px;
+        --title-top: 112px;
+        --peek: 1.5;
+        --gaps: 1;
+        --card-w-pref: var(--card-w-by-width);
+
+        justify-content: center;
+        padding-top: var(--title-top);
+        padding-bottom: var(--bottom-reserve);
     }
 
+    .loc-card__face--back {
+        --back-name: 20px;
+        --back-area: 14px;
+        --back-body: 16px;
+        --back-body-lh: 26px;
+        --back-label: 14px;
+        --back-phone: 16px;
+        --back-phone-lh: 30px;
+        --back-icon: 20px;
+        --back-btn: 14px;
+        --back-btn-h: 52px;
+        --back-tracking: 2px;
+        --back-pad-x: 48;
+    }
+}
+
+@media (min-width:769px) and (max-height:720px) {
+    #hero {
+        padding: 14px;
+    }
+
+    .locations {
+        --title-top: 62px;
+        --title-size: 32px;
+        --title-gap: 16px;
+        --controls-h: 0px;
+        --bottom-reserve: 105px;
+        --card-h: max(220px, calc(var(--frame-h) - var(--title-top) - var(--fixed-h)));
+        --card-w: min(var(--card-w-pref), max(260px, calc(var(--card-h) * 0.8085)));
+    }
+
+    .embla__controls {
+        position: absolute;
+        left: 50%;
+        bottom: 38px;
+        transform: translateX(-50%);
+        margin: 0;
+        z-index: 3;
+    }
+
+    .dots-bottom {
+        display: none;
+    }
+
+    .loc-card__inner {
+        aspect-ratio: auto;
+        height: var(--card-h);
+    }
+
+    .dots span {
+        width: 4px;
+        height: 4px;
+    }
+
+    .dots-top,
     .dots-left {
-        top: 40%;
+        gap: 10px;
     }
 
-    #tilt-card {
-
-        transform: none !important;
-        perspective: none !important;
-
+    .loc-card__lines {
+        display: none;
     }
 
+    .loc-card__image {
+        flex: 0 1 auto;
+        min-height: 0;
+    }
+
+    .loc-card__face--back {
+        --back-name: 14px;
+        --back-area: 10px;
+        --back-body: 11px;
+        --back-body-lh: 15px;
+        --back-label: 10px;
+        --back-phone: 12px;
+        --back-phone-lh: 20px;
+        --back-icon: 14px;
+        --back-btn: 10px;
+        --back-btn-h: 28px;
+        --back-tracking: 1px;
+        --back-pad-x: 30;
+
+        padding-block: 20px;
+    }
+
+    .loc-card__logo,
+    .loc-card__label {
+        display: none;
+    }
+
+    .loc-card__name {
+        margin-top: 0;
+    }
+
+    .loc-card__address {
+        margin-top: 18px;
+    }
+
+    .loc-card__divider {
+        margin: 24px 0;
+    }
+
+    .loc-card__phone {
+        margin: 2px 0 8px;
+    }
 }
 
 
-
 @media (max-width:768px) {
-    body {
 
-        overflow-y: auto;
 
+    .embla__controls {
+        justify-content: space-between;
+        margin-right: var(--slider-left);
     }
 
 
+    body {
+        overflow-y: auto;
+    }
+
     #hero {
-        height: 100%;
+        height: auto;
+        min-height: 100vh;
+        min-height: 100svh;
         padding: 12px;
     }
 
     .frame {
-        height: 100%;
-
+        height: auto;
+        min-height: calc(100svh - 24px);
+        display: flex;
+        flex-direction: column;
     }
 
-
     .title-image {
-
         left: 16px;
         top: 16px;
         width: 84px;
         height: 42px;
     }
 
-    .main-content-warapper {
-        padding: 93px 30px 53px 30px;
-        gap: 30px;
-
-    }
-
-    .logo-card-wrapper {
-        margin-left: 0;
-        width: 100%;
-        max-width: 350px;
-        height: auto;
-        margin-right: 0;
-    }
-
-    .grid-bg {
-        display: none;
-    }
-
-    .logo-card-wrapper::before {
-        display: none;
-    }
-
-    .logo-card-wrapper::after {
-        content: "";
-        position: absolute;
-        background: var(--black);
-        height: 1px;
-        width: 200vw;
-        top: 50%;
-        left: -50%;
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    .text-block {
-        padding-top: 0;
-        max-width: 508px;
-    }
-
-    .stamp-image-wrapper {
-        top: -8%;
-        right: -5%;
-    }
-
-    .silhouette {
-        height: 173px;
-        right: 0;
-        top: unset;
-        bottom: 0;
-
-    }
-
-
-    .silhouette img {
-        height: auto;
-        right: 0;
-
-    }
-
-    .music-player-wrapper {
-        padding: 5px 10px;
-
-    }
-
-    .title {
-        padding-bottom: 4px;
-        font-size: 42px;
-        line-height: 100%;
-        letter-spacing: -3px;
-    }
-
-    .description {
-        padding-top: 4px;
-        font-size: 14px;
-
-    }
-
-    .logo-card-wrapper::before {
-        top: unset;
-        bottom: 0;
-
-    }
-
-    .dots-top,
-    .dots-bottom {
-        display: none;
-    }
-
-    .grid-bg::after {
-
-        top: 40%;
-    }
-
-    .dots-left {
-        display: none;
-    }
-
+    .dots-left,
     .explore-btn {
-        left: 28px;
-        bottom: 54px;
-        top: unset;
-        right: unset;
+        display: none;
+    }
+
+    .locations {
+        --slider-left: 20px;
+        --end-gap: 20px;
+        --gap: 16px;
+        --title-size: clamp(32px, 9vw, 48px);
+        --title-gap: 24px;
+        --controls-gap: 24px;
+        --card-w: min(439px, calc(100vw - 24px - 20px - 56px));
+
+        position: relative;
+        inset: auto;
+        padding-top: 96px;
+    }
+
+    .locations__title {
+        padding-right: 20px;
+        letter-spacing: -0.06em;
+    }
+
+    .tagline {
+        position: static;
+        padding: 40px 20px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: auto;
+    }
+
+    .tagline p {
+        font-size: 16px;
+        line-height: 120%;
+        text-align: left;
+    }
+
+    .explore-btn-mobile {
+        display: inline-block;
+        align-self: flex-start;
+        font-family: var(--font-main);
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 16px;
+        letter-spacing: -1px;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-decoration-skip-ink: auto;
+        text-underline-offset: 4px;
     }
 
     .music-info {
@@ -1016,13 +1346,6 @@ body {
         right: 16px;
         bottom: unset;
         left: unset;
-
-    }
-
-    .musicBarWrapper {
-
-        height: 35px;
-        width: calc((var(--boxSize) + var(--gutter)) * 4);
     }
 
     .music-player-wrapper {
@@ -1032,164 +1355,10 @@ body {
     .track-text {
         display: none;
     }
-
-    .bar {
-        height: 80%;
-        width: 3px;
-    }
-
-    .stamp-image-center {
-        width: 25px;
-        height: 18px;
-
-    }
-
-    .stamp-image-wrapper .rotateimgtext {
-        width: 52px;
-        height: 52px;
-    }
-
-    .stamp-image-wrapper .rotateimgtext img {
-        width: 52px;
-        height: 52px;
-    }
 }
 
 @media (max-width:630px) {
-
-    .image-show-tablet {
-
-        display: none;
-    }
-
     .frame {
         border-radius: var(--frame-radius-mobile);
-    }
-
-}
-
-
-@media (max-width:530px) {
-    .main-content-warapper {
-        align-items: center;
-        gap: 25px;
-    }
-
-
-}
-
-@media (max-width:450px) {
-
-
-
-    .explore-btn {
-        display: none;
-    }
-
-    .mobile-explore-button-wrapper {
-
-        display: inline-flex;
-        position: relative;
-        justify-content: start;
-        margin-top: 32px;
-    }
-
-    .explore-btn-mobile {
-        position: relative;
-        display: flex;
-        align-items: center;
-        border: 1.33px solid var(--black);
-        border-radius: 4px;
-        text-decoration: none;
-        color: var(--black);
-        background: var(--white);
-        overflow: hidden;
-
-    }
-
-
-    .explore-btn-mobile .btn-text {
-
-        padding: 14px 20px 14px 14px;
-        gap: 3px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        font-size: 16px;
-        font-family: var(--font-main);
-        font-weight: 700;
-        letter-spacing: -1.33px;
-        border-right: 1.33px solid var(--black);
-        transition: color 0.5s ease-in;
-
-    }
-
-
-    .explore-btn-mobile .btn-text p {
-        font-size: 14px;
-        font-weight: 200;
-        font-style: italic;
-        position: relative;
-        z-index: 2;
-    }
-
-    .explore-btn-mobile .btn-icon {
-        justify-content: center;
-        align-items: center;
-        display: flex;
-        padding: 12px;
-
-    }
-
-    .explore-btn-mobile .explore-btn .btn-icon {
-        width: 35px;
-        height: 25px;
-        line-height: 100%;
-        letter-spacing: -0.67px;
-        transition: transform 0.8s ease;
-    }
-
-
-}
-
-
-@media (max-width:350px) {
-    #hero {
-        height: 100%;
-        min-height: 800px;
-    }
-
-    .title {
-        font-size: 36px;
-    }
-}
-
-@media (max-width:377px) {
-    #hero {
-        height: 100%;
-        min-height: 800px;
-    }
-
-
-}
-
-
-/* odd screens - for horizontal fix */
-@media (max-width: 768px) and (max-height: 800px) {
-    #hero {
-        height: 100%;
-        min-height: 850px;
-    }
-
-}
-
-@media (min-width: 768px) and (max-width: 1080px) and (max-height: 850px) {
-    #hero {
-        height: 100%;
-        min-height: 950px;
-    }
-
-    body {
-        overflow-y: auto;
     }
 }

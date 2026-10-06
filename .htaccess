@@ -1,0 +1,50 @@
+# --------------------------------------------
+# ENABLE REWRITE ENGINE
+# --------------------------------------------
+RewriteEngine On
+RewriteBase /
+
+# --------------------------------------------
+# SKIP RULES for *_mail.php (contact_mail.php etc.)
+# --------------------------------------------
+RewriteCond %{REQUEST_URI} .*_mail\.php$ [NC]
+RewriteRule ^ - [L]
+
+# --------------------------------------------
+# REDIRECT HTTP → HTTPS (preserve POST using 308)
+# --------------------------------------------
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=308]
+
+# --------------------------------------------
+# REDIRECT NON-WWW → WWW (preserve POST using 308)
+# --------------------------------------------
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ https://www.lokobymakeba.com/$1 [R=308,L]
+
+# --------------------------------------------
+# ALLOWED PATHS (DO NOT REDIRECT THESE)
+# --------------------------------------------
+
+# Allow homepage
+RewriteCond %{REQUEST_URI} ^/$ [OR]
+
+# Allow API folder
+RewriteCond %{REQUEST_URI} ^/api/ [OR]
+
+# Allow assets folder (ALL files inside it)
+RewriteCond %{REQUEST_URI} ^/assets/ [OR]
+
+# Allow robots.txt
+RewriteCond %{REQUEST_URI} ^/robots\.txt$ [OR]
+
+# Allow sitemap.xml
+RewriteCond %{REQUEST_URI} ^/sitemap\.xml$
+
+# If match → allow request
+RewriteRule .* - [L]
+
+# --------------------------------------------
+# EVERYTHING ELSE → REDIRECT TO HOME
+# --------------------------------------------
+RewriteRule ^.*$ / [L,R=301]
