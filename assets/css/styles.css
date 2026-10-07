@@ -273,7 +273,7 @@ a {
     --slider-left: 193px;
     --end-gap: clamp(16px, 3.33vw, 64px);
     --gap: clamp(16px, 2.19vw, 42px);
-    --title-size: clamp(34px, 3.34vw, 64px);
+    --title-size: clamp(34px, 3.34vw, 60px);
     --title-gap: clamp(20px, 2.97vh, 32px);
     --controls-gap: clamp(20px, 3.7vh, 40px);
     --btn-size: 44px;
@@ -412,6 +412,9 @@ a {
 
 .loc-card__inner {
     --u: calc(100cqw / 439);
+    /* back-face side padding, in Figma px; the front matches it once the
+       sketch lines are hidden */
+    --back-pad-x: 80;
     --flip-ease: cubic-bezier(0.65, 0, 0.25, 1);
 
     flex: 1;
@@ -481,11 +484,6 @@ a {
     }
 }
 
-.loc-card.is-intro .loc-card__inner {
-    transform: rotateY(180deg);
-    transition: none;
-}
-
 .loc-card {
     position: relative;
 }
@@ -511,8 +509,7 @@ a {
     pointer-events: none;
 }
 
-@media (hover: none),
-(pointer: coarse) {
+@media (max-width:1080px) {
     .loc-card__hint {
         display: flex;
     }
@@ -605,7 +602,6 @@ a {
     --back-btn: 14px;
     --back-btn-h: 52px;
     --back-tracking: 2px;
-    --back-pad-x: 80;
     --back-divider: 32;
 
     align-items: stretch;
@@ -668,9 +664,15 @@ a {
 }
 
 .loc-card__divider {
-    margin: calc(var(--back-divider) * var(--u)) 0;
+    margin: calc(var(--back-divider) * var(--u) + var(--divider-extra, 0px)) 0;
     border: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+/* cards without an area subtitle hand that space to the divider,
+   split evenly above and below it */
+.loc-card__name+.loc-card__address~.loc-card__divider {
+    --divider-extra: calc((6 * var(--u) + var(--back-area)) / 2);
 }
 
 .loc-card__label {
@@ -931,7 +933,6 @@ a {
         --back-btn: 12px;
         --back-btn-h: 44px;
         --back-tracking: 1.5px;
-        --back-pad-x: 80;
         --back-divider: 18;
     }
 }
@@ -949,7 +950,6 @@ a {
         --back-btn: 11px;
         --back-btn-h: 40px;
         --back-tracking: 1.5px;
-        --back-pad-x: 40;
         --back-divider: 32;
     }
 }
@@ -967,7 +967,6 @@ a {
         --back-btn: 12px;
         --back-btn-h: 44px;
         --back-tracking: 1.5px;
-        --back-pad-x: 40;
         --back-divider: 32;
     }
 }
@@ -1092,6 +1091,28 @@ a {
     .loc-card__lines {
         display: none;
     }
+
+    .loc-card__inner {
+        --back-pad-x: 40;
+    }
+}
+
+/* Without the sketch lines, the front's image and footer words line up with
+   the back's text on the same side padding */
+@media (max-width:1366px),
+(min-width:769px) and (max-height:800px) {
+    .loc-card__face--front {
+        padding-inline: calc(var(--back-pad-x) * var(--u));
+    }
+
+    .loc-card__image {
+        align-self: stretch;
+        width: auto;
+    }
+
+    .loc-card__footer {
+        margin-inline: 0;
+    }
 }
 
 @media (max-width:1080px) {
@@ -1146,6 +1167,10 @@ a {
         padding-bottom: var(--bottom-reserve);
     }
 
+    .loc-card__inner {
+        --back-pad-x: 48;
+    }
+
     .loc-card__face--back {
         --back-name: 20px;
         --back-area: 14px;
@@ -1158,17 +1183,16 @@ a {
         --back-btn: 14px;
         --back-btn-h: 52px;
         --back-tracking: 2px;
-        --back-pad-x: 48;
     }
 }
 
-@media (min-width:769px) and (max-height:720px) {
+@media (min-width:769px) and (max-height:800px) {
     #hero {
         padding: 14px;
     }
 
     .locations {
-        --title-top: 62px;
+        --title-top: 82px;
         --title-size: 32px;
         --title-gap: 16px;
         --controls-h: 0px;
@@ -1191,6 +1215,8 @@ a {
     }
 
     .loc-card__inner {
+        --back-pad-x: 30;
+
         aspect-ratio: auto;
         height: var(--card-h);
     }
@@ -1209,8 +1235,10 @@ a {
         display: none;
     }
 
+    /* card height comes from the screen here, so the image takes up
+       whatever room is left between the title and the footer */
     .loc-card__image {
-        flex: 0 1 auto;
+        flex: 1 1 0;
         min-height: 0;
     }
 
@@ -1226,7 +1254,6 @@ a {
         --back-btn: 10px;
         --back-btn-h: 28px;
         --back-tracking: 1px;
-        --back-pad-x: 30;
 
         padding-block: 20px;
     }
@@ -1245,11 +1272,49 @@ a {
     }
 
     .loc-card__divider {
-        margin: 24px 0;
+        margin: calc(24px + var(--divider-extra, 0px)) 0;
     }
 
     .loc-card__phone {
         margin: 2px 0 8px;
+    }
+
+    .locations__title {
+        margin-bottom: 24px;
+    }
+
+}
+
+/* short laptops (e.g. 1536x730, 1366x768): same layout as above, but the
+   cards are tall enough for the roomier back */
+@media (min-width:769px) and (min-height:721px) and (max-height:800px) {
+    .loc-card__face--back {
+        --back-name: 17px;
+        --back-area: 12px;
+        --back-body: 14px;
+        --back-body-lh: 21px;
+        --back-label: 12px;
+        --back-phone: 14px;
+        --back-phone-lh: 26px;
+        --back-icon: 18px;
+        --back-btn: 12px;
+        --back-btn-h: 44px;
+        --back-tracking: 1.5px;
+
+        padding-block: 24px;
+    }
+
+    .loc-card__logo,
+    .loc-card__label {
+        display: block;
+    }
+
+    .loc-card__name {
+        margin-top: 16px;
+    }
+
+    .loc-card__phone {
+        margin: 6px 0 12px;
     }
 }
 

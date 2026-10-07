@@ -63,17 +63,4 @@ document.addEventListener("DOMContentLoaded", () => {
       card.classList.toggle("is-flipped");
     });
   });
-
-  // INTRO HINT: first card starts on its back, then flips to the front once
-  // the page has loaded, so visitors see that the cards flip
-  const firstCard = cards[0];
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  // Touch devices skip it: they have the flip icon on each card instead
-  const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
-  if (firstCard && !reduceMotion && !isTouch) {
-    firstCard.classList.add("is-intro");
-    const playIntro = () => setTimeout(() => firstCard.classList.remove("is-intro"), 900);
-    if (document.readyState === "complete") playIntro();
-    else window.addEventListener("load", playIntro, { once: true });
-  }
 });
