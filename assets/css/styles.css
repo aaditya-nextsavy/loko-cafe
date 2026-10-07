@@ -1318,6 +1318,44 @@ a {
     }
 }
 
+/* Laptops/desktops above 1366px wide and 800px tall (e.g. 1437x837,
+   1440x900, 1536x864): the card keeps its Figma ratio instead of growing to
+   fit the back's text (a taller card pushed the slider controls down onto
+   the music button). When the card is narrow, the back drops its sketch
+   lines and uses the compact text so the address still fits. */
+@media (min-width:1367px) and (min-height:801px) {
+    .loc-card__inner {
+        min-height: 0;
+        grid-template-rows: minmax(0, 1fr);
+    }
+
+    .loc-card__face {
+        min-height: 0;
+    }
+
+    @container (max-width: 380px) {
+        .loc-card__face--back {
+            --back-pad-x: 40;
+            --back-name: 15px;
+            --back-area: 11px;
+            --back-body: 13px;
+            --back-body-lh: 19px;
+            --back-label: 11px;
+            --back-phone: 13px;
+            --back-phone-lh: 24px;
+            --back-icon: 16px;
+            --back-btn: 11px;
+            --back-btn-h: 40px;
+            --back-tracking: 1.5px;
+            --back-divider: 24;
+        }
+
+        .loc-card__face--back .loc-card__lines {
+            display: none;
+        }
+    }
+}
+
 
 @media (max-width:768px) {
 
